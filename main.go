@@ -33,6 +33,7 @@ func main() {
 	 */
 	v1.GET("/todo",todoRoutes.ReadTodo)
 	v1.POST("/todo",todoRoutes.CreateTodo)
+	v1.PUT("/todo/:id",todoRoutes.UpdateTodo)
 
 	
 	router.Run("localhost:8080")

@@ -3,10 +3,12 @@ package todos
 import (
 	"todosAPI/database"
 	"todosAPI/todos/create"
+	"todosAPI/todos/update"
 )
 type Controller interface {
 	CreateTodo(input create.CreateTodoInput) (database.Todos, error)
 	ReadTodo() ([]database.Todos, error)
+	UpdateTodo(input update.UpdateTodo,id string) (database.Todos, error)
 }
 
 type controller struct {
@@ -38,4 +40,13 @@ func (c *controller) ReadTodo() ([]database.Todos, error) {
 	}
 
 	return todos,nil
+}
+
+func (c *controller) UpdateTodo(input update.UpdateTodo,id string) (database.Todos, error) {
+	todo,err := c.model.Update(input,id)
+	if err != nil {
+		return todo,err
+	}
+
+	return todo,nil
 }

@@ -2,6 +2,7 @@ package todos
 
 import (
 	"todosAPI/database"
+	"todosAPI/todos/update"
 
 	"todosAPI/utils"
 
@@ -11,6 +12,7 @@ import (
 type Model interface {
 	Read() ([]database.Todos, error)
 	Create(todo database.Todos)	(database.Todos, error)
+	Update(input update.UpdateTodo,id string) (database.Todos, error)
 }
 
 type constructor struct {
@@ -33,11 +35,31 @@ func (c *constructor) Create(todo database.Todos) (database.Todos, error) {
 
 func (c *constructor) Read() ([]database.Todos,error) {
 	var todo []database.Todos
-	err := c.db.Preload("Category").Find(&todo).Error
+	err := c.db.Preload("Category").Order("id").Find(&todo).Error
 
 	if err != nil {
 		return todo, err
 	}
 
+	return todo, nil
+}
+
+func (c *constructor) Update(input update.UpdateTodo,id string) (database.Todos, error) {
+	var todo database.Todos
+	
+	err := c.db.Find(&todo,id).Error
+	if err != nil {
+		return todo, err
+	}
+
+	todo.Title = input.Title
+	todo.Description = input.Description
+	todo.CategoryID = input.CategoryID
+	errSave := c.db.Save(&todo).Error
+
+	if errSave != nil {
+		return todo, errSave
+	}
+	
 	return todo, nil
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"todosAPI/category"
 	"todosAPI/category/create"
+	"todosAPI/category/read"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -26,7 +27,7 @@ func (r *categoryRoute) GetCategoryRoute(c *gin.Context) {
 		return
 	}
 	
-	formatResponse := create.FormatCategories(category)
+	formatResponse := read.FormatCategories(category)
 	c.JSON(http.StatusOK,formatResponse)
 }
 
