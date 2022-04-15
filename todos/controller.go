@@ -21,6 +21,7 @@ func (c *controller) CreateTodo(input create.CreateTodoInput) (database.Todos, e
 	todo := database.Todos{}
 	todo.Title = input.Title
 	todo.Description = input.Description
+	todo.CategoryID = input.CategoryID
 
 	newTodo,err := c.model.Create(todo)
 	if err != nil {

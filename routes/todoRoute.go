@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"todosAPI/todos"
 	"todosAPI/todos/create"
+	"todosAPI/todos/read"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,10 +19,10 @@ func TodoRouteInit(todoController todos.Controller) *todoRoute  {
 
 func (r *todoRoute) CreateTodo(c *gin.Context) {
 	var input create.CreateTodoInput
-	err := c.BindJSON(&input)
+	err := c.ShouldBindJSON(&input)
 	
 	if err != nil {
-		c.JSON(http.StatusBadRequest,err)
+		c.JSON(http.StatusBadRequest,err.Error())
 		return
 	}
 
@@ -41,6 +42,6 @@ func (r *todoRoute) ReadTodo(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity,err)
 		return
 	}
-	formatResponse := create.FormatTodos(todos)
+	formatResponse := read.FormatTodos(todos)
 	c.JSON(http.StatusOK,formatResponse)
 }

@@ -18,14 +18,22 @@ func main() {
 
 	v1 := router.Group("/api/v1")	
 	
-	// category
+	/**
+	 * category route
+	 * * this is category handler route 
+	 */
 	v1.GET("/category",categoryRoutes.GetCategoryRoute)
 	v1.GET("/category/:id",categoryRoutes.FindCategoryRoute)
 	v1.POST("/category",categoryRoutes.CreateCategoryRoute)
 	v1.DELETE("/category/:id",categoryRoutes.DeleteCategoryRoute)
-	// end category
 
+	/**
+	 * _todo route
+	 * * this is todo handler route
+	 */
 	v1.GET("/todo",todoRoutes.ReadTodo)
 	v1.POST("/todo",todoRoutes.CreateTodo)
+
+	
 	router.Run("localhost:8080")
 }
