@@ -12,7 +12,8 @@ import (
 type Model interface {
 	Read() ([]database.Todos, error)
 	Create(todo database.Todos)	(database.Todos, error)
-	Update(input update.UpdateTodo,id string) (database.Todos, error)
+	Update(input update.UpdateTodo,ID string) (database.Todos, error)
+	Delete(ID string) (database.Todos, error)
 }
 
 type constructor struct {
@@ -44,10 +45,10 @@ func (c *constructor) Read() ([]database.Todos,error) {
 	return todo, nil
 }
 
-func (c *constructor) Update(input update.UpdateTodo,id string) (database.Todos, error) {
+func (c *constructor) Update(input update.UpdateTodo,ID string) (database.Todos, error) {
 	var todo database.Todos
 	
-	err := c.db.First(&todo,id).Error
+	err := c.db.First(&todo,ID).Error
 	if err != nil {
 		return todo, err
 	}
@@ -59,6 +60,17 @@ func (c *constructor) Update(input update.UpdateTodo,id string) (database.Todos,
 
 	if errSave != nil {
 		return todo, errSave
+	}
+	
+	return todo, nil
+}
+
+func (c *constructor) Delete(ID string) (database.Todos, error) {
+	var todo database.Todos
+	err := c.db.First(&todo,ID).Delete(&todo).Error
+	
+	if err != nil {
+		return todo, err
 	}
 	
 	return todo, nil

@@ -8,7 +8,8 @@ import (
 type Controller interface {
 	CreateTodo(input create.CreateTodoInput) (database.Todos, error)
 	ReadTodo() ([]database.Todos, error)
-	UpdateTodo(input update.UpdateTodo,id string) (database.Todos, error)
+	UpdateTodo(input update.UpdateTodo,ID string) (database.Todos, error)
+	DeleteTodo(ID string) (database.Todos, error)
 }
 
 type controller struct {
@@ -42,8 +43,17 @@ func (c *controller) ReadTodo() ([]database.Todos, error) {
 	return todos,nil
 }
 
-func (c *controller) UpdateTodo(input update.UpdateTodo,id string) (database.Todos, error) {
-	todo,err := c.model.Update(input,id)
+func (c *controller) UpdateTodo(input update.UpdateTodo,ID string) (database.Todos, error) {
+	todo,err := c.model.Update(input,ID)
+	if err != nil {
+		return todo,err
+	}
+
+	return todo,nil
+}
+
+func (c *controller) DeleteTodo(ID string) (database.Todos, error) {
+	todo,err := c.model.Delete(ID)
 	if err != nil {
 		return todo,err
 	}

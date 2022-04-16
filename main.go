@@ -34,6 +34,7 @@ func main() {
 	v1.GET("/todo",todoRoutes.ReadTodo)
 	v1.POST("/todo",todoRoutes.CreateTodo)
 	v1.PUT("/todo/:id",todoRoutes.UpdateTodo)
+	v1.DELETE("/todo/:id",todoRoutes.DeleteTodo)
 
 	
 	router.Run("localhost:8080")

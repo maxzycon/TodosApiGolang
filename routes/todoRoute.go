@@ -68,7 +68,6 @@ func (r *todoRoute) UpdateTodo(c *gin.Context) {
 	 * binding json input
 	 * * validate json request
 	 */
-	
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest,err.Error())
@@ -98,4 +97,19 @@ func (r *todoRoute) UpdateTodo(c *gin.Context) {
 	 */
 	formatResponse := create.FormatTodo(todo)
 	c.JSON(http.StatusOK,formatResponse)
+}
+
+/**
+ * * Handler delete route
+ */
+func (r *todoRoute) DeleteTodo(c *gin.Context) {
+	id := c.Param("id")
+	_,err := r.todoController.DeleteTodo(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound,gin.H{"status": "data not found"})
+		}
+		return
+	}
+	c.JSON(http.StatusOK,gin.H{"status": "successfull delete"})
 }
