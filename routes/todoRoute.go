@@ -2,10 +2,10 @@ package routes
 
 import (
 	"net/http"
-	"todosAPI/todos"
-	"todosAPI/todos/create"
-	"todosAPI/todos/read"
-	"todosAPI/todos/update"
+	"todosAPI/src/todos"
+	"todosAPI/src/todos/create"
+	"todosAPI/src/todos/read"
+	"todosAPI/src/todos/update"
 
 	"github.com/gin-gonic/gin"
 )

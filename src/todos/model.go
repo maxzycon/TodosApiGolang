@@ -2,7 +2,7 @@ package todos
 
 import (
 	"todosAPI/database"
-	"todosAPI/todos/update"
+	"todosAPI/src/todos/update"
 
 	"todosAPI/utils"
 

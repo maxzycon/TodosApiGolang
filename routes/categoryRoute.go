@@ -3,9 +3,9 @@ package routes
 import (
 	"errors"
 	"net/http"
-	"todosAPI/category"
-	"todosAPI/category/create"
-	"todosAPI/category/read"
+	"todosAPI/src/category"
+	"todosAPI/src/category/create"
+	"todosAPI/src/category/read"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

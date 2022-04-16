@@ -1,9 +1,9 @@
 package main
 
 import (
-	"todosAPI/category"
 	"todosAPI/routes"
-	"todosAPI/todos"
+	"todosAPI/src/category"
+	"todosAPI/src/todos"
 	"todosAPI/utils"
 
 	"github.com/gin-gonic/gin"

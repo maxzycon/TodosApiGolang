@@ -1,8 +1,8 @@
 package category
 
 import (
-	"todosAPI/category/create"
 	"todosAPI/database"
+	"todosAPI/src/category/create"
 )
 type Controller interface {
 	GetCategoryController() ([]database.Category, error)

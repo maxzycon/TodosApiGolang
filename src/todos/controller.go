@@ -2,8 +2,8 @@ package todos
 
 import (
 	"todosAPI/database"
-	"todosAPI/todos/create"
-	"todosAPI/todos/update"
+	"todosAPI/src/todos/create"
+	"todosAPI/src/todos/update"
 )
 type Controller interface {
 	CreateTodo(input create.CreateTodoInput) (database.Todos, error)
