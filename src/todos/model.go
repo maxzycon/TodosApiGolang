@@ -47,7 +47,7 @@ func (c *constructor) Read() ([]database.Todos,error) {
 func (c *constructor) Update(input update.UpdateTodo,id string) (database.Todos, error) {
 	var todo database.Todos
 	
-	err := c.db.Find(&todo,id).Error
+	err := c.db.First(&todo,id).Error
 	if err != nil {
 		return todo, err
 	}

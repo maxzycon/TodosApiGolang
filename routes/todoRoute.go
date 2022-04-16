@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"errors"
 	"net/http"
 	"todosAPI/src/todos"
 	"todosAPI/src/todos/create"
@@ -8,6 +9,7 @@ import (
 	"todosAPI/src/todos/update"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type todoRoute struct {
@@ -17,6 +19,10 @@ type todoRoute struct {
 func TodoRouteInit(todoController todos.Controller) *todoRoute  {
 	return &todoRoute{todoController}
 }
+
+/**
+ * * Handler create todo
+ */
 
 func (r *todoRoute) CreateTodo(c *gin.Context) {
 	var input create.CreateTodoInput
@@ -37,6 +43,10 @@ func (r *todoRoute) CreateTodo(c *gin.Context) {
 	c.JSON(http.StatusOK,formatResponse)
 }
 
+/**
+ * * Handler read todo
+ */
+
 func (r *todoRoute) ReadTodo(c *gin.Context) {
 	todos,err := r.todoController.ReadTodo()
 	if err != nil {
@@ -50,16 +60,15 @@ func (r *todoRoute) ReadTodo(c *gin.Context) {
 func (r *todoRoute) UpdateTodo(c *gin.Context) { 
 	var input update.UpdateTodo
 	/**
-	 * binding uri
-	 * TODO: bikin binding uri search di google dlu	
+	 * * Get params id from uri
 	 */
-
 	id := c.Param("id")
 
 	/**
 	 * binding json input
 	 * * validate json request
 	 */
+	
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest,err.Error())
@@ -77,7 +86,9 @@ func (r *todoRoute) UpdateTodo(c *gin.Context) {
 	 * * check if service error or not
 	 */
 	if err != nil {
-		c.JSON(http.StatusUnprocessableEntity,err)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusNotFound,gin.H{"status": "data not found"})
+		}
 		return
 	}
 
