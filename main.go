@@ -14,10 +14,15 @@ func main() {
 	utils.ConnectDB()
 	router := gin.Default()
 
+	/**
+	 * init
+	 * * initial route handler
+	 */
 	todoRoutes := routes.TodoRouteInit(todos.InitConstructorController(todos.InitConstructor()))
 	categoryRoutes := routes.CategoryRouteInit(category.InitConstructorController(category.InitConstructor()))
 	authRoute := routes.AuthRouteInit(auth.InitConstructorController(auth.InitConstructor()))
 
+	// * route group v1 e.g domain.com/api/v1
 	v1 := router.Group("/api/v1")	
 
 	/**
@@ -25,6 +30,8 @@ func main() {
 	 * * register login route
 	 */
 	v1.POST("/registration",authRoute.RegistrationUserRoute)
+	// TODO: login 
+	v1.POST("/login",authRoute.LoginUserRoute)
 
 	/**
 	 * category route
