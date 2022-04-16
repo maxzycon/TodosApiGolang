@@ -2,6 +2,7 @@ package main
 
 import (
 	"todosAPI/routes"
+	"todosAPI/src/auth"
 	"todosAPI/src/category"
 	"todosAPI/src/todos"
 	"todosAPI/utils"
@@ -15,9 +16,16 @@ func main() {
 
 	todoRoutes := routes.TodoRouteInit(todos.InitConstructorController(todos.InitConstructor()))
 	categoryRoutes := routes.CategoryRouteInit(category.InitConstructorController(category.InitConstructor()))
+	authRoute := routes.AuthRouteInit(auth.InitConstructorController(auth.InitConstructor()))
 
 	v1 := router.Group("/api/v1")	
-	
+
+	/**
+	 * register login route
+	 * * register login route
+	 */
+	v1.POST("/registration",authRoute.RegistrationUserRoute)
+
 	/**
 	 * category route
 	 * * this is category handler route 

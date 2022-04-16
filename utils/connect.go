@@ -18,6 +18,6 @@ func ConnectDB() {
 	}
 	fmt.Println("conenction database success")
 	DB = db
-	DB.AutoMigrate(&database.Category{}, &database.Todos{})
+	DB.AutoMigrate(&database.Category{}, &database.Todos{}, &database.User{})
 	fmt.Println("Database Migrated")
 }
