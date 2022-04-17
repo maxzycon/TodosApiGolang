@@ -55,5 +55,5 @@ func main() {
 	middlewareAuth.DELETE("/todo/:id",todoRoutes.DeleteTodo)
 
 	
-	router.Run("localhost:8080")
+	router.Run("0.0.0.0:8080")
 }
