@@ -1,10 +1,12 @@
 package main
 
 import (
+	"todosAPI/middleware"
 	"todosAPI/routes"
 	"todosAPI/src/auth"
 	"todosAPI/src/category"
 	"todosAPI/src/todos"
+	"todosAPI/src/token"
 	"todosAPI/utils"
 
 	"github.com/gin-gonic/gin"
@@ -24,32 +26,33 @@ func main() {
 
 	// * route group v1 e.g domain.com/api/v1
 	v1 := router.Group("/api/v1")	
+	token,_ := token.NewJWTMaker("12345678901234567890123456789012")
+	middlewareAuth := v1.Group("/").Use(middleware.AuthMiddleware(token))
 
 	/**
 	 * register login route
 	 * * register login route
 	 */
 	v1.POST("/registration",authRoute.RegistrationUserRoute)
-	// TODO: login 
 	v1.POST("/login",authRoute.LoginUserRoute)
 
 	/**
 	 * category route
 	 * * this is category handler route 
 	 */
-	v1.GET("/category",categoryRoutes.GetCategoryRoute)
-	v1.GET("/category/:id",categoryRoutes.FindCategoryRoute)
-	v1.POST("/category",categoryRoutes.CreateCategoryRoute)
-	v1.DELETE("/category/:id",categoryRoutes.DeleteCategoryRoute)
+	middlewareAuth.GET("/category",categoryRoutes.GetCategoryRoute)
+	middlewareAuth.GET("/category/:id",categoryRoutes.FindCategoryRoute)
+	middlewareAuth.POST("/category",categoryRoutes.CreateCategoryRoute)
+	middlewareAuth.DELETE("/category/:id",categoryRoutes.DeleteCategoryRoute)
 
 	/**
 	 * _todo route
 	 * * this is todo handler route
 	 */
-	v1.GET("/todo",todoRoutes.ReadTodo)
-	v1.POST("/todo",todoRoutes.CreateTodo)
-	v1.PUT("/todo/:id",todoRoutes.UpdateTodo)
-	v1.DELETE("/todo/:id",todoRoutes.DeleteTodo)
+	middlewareAuth.GET("/todo",todoRoutes.ReadTodo)
+	middlewareAuth.POST("/todo",todoRoutes.CreateTodo)
+	middlewareAuth.PUT("/todo/:id",todoRoutes.UpdateTodo)
+	middlewareAuth.DELETE("/todo/:id",todoRoutes.DeleteTodo)
 
 	
 	router.Run("localhost:8080")

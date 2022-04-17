@@ -25,6 +25,10 @@ func InitConstructor() *constructor {
 }
 
 func (c *constructor) Create(todo database.Todos) (database.Todos, error) {
+	// var ctx *gin.Context
+	// authPayload := ctx.MustGet("authorization_payload_key").(*token.Payload)
+	// todo.Username = authPayload.Username
+
 	err := c.db.Create(&todo).Error
 	
 	if err != nil {
@@ -35,7 +39,7 @@ func (c *constructor) Create(todo database.Todos) (database.Todos, error) {
 }
 
 func (c *constructor) Read() ([]database.Todos,error) {
-	var todo []database.Todos
+	var todo []database.Todos	
 	err := c.db.Preload("Category").Order("id").Find(&todo).Error
 
 	if err != nil {

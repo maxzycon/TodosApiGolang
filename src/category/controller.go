@@ -5,7 +5,7 @@ import (
 	"todosAPI/src/category/create"
 )
 type Controller interface {
-	GetCategoryController() ([]database.Category, error)
+	GetCategoryController(IsTodo string) ([]database.Category, error)
 	FindCategoryController(ID string) (database.Category, error)
 	DeleteCategoryController(ID string) (database.Category, error)
 	CreateCategoryController(input create.CreateCategoryInput) (database.Category, error)
@@ -19,8 +19,8 @@ func InitConstructorController(model Model) *controller {
 	return &controller{model}
 }
 
-func (c *controller) GetCategoryController() ([]database.Category, error)  {
-	categories,err := c.model.Get()
+func (c *controller) GetCategoryController(IsTodo string) ([]database.Category, error)  {
+	categories,err := c.model.Get(IsTodo)
 	if err != nil {
 		return categories,err
 	}
@@ -46,8 +46,10 @@ func (c *controller) DeleteCategoryController(ID string) (database.Category, err
 func (c *controller) CreateCategoryController(input create.CreateCategoryInput) (database.Category, error)  {
 	category := database.Category{}
 	category.Name = input.Name
+	category.UserID = input.UserID
 
 	newCategory,err := c.model.Create(category)
+
 	if err != nil {
 		return category,err
 	}

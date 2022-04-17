@@ -8,6 +8,11 @@ type FormatterCategoryCreate struct {
 	Todos []TodoFormatterCreate `json:"todos"`
 }
 
+type FormatterWithoutTodos struct {
+	ID uint `json:"id"`
+	Name string `json:"name"`
+}
+
 type TodoFormatterCreate struct {
 	ID uint `json:"id"`
 	Title string `json:"title"`
@@ -20,6 +25,24 @@ func FormatCategory(category database.Category) FormatterCategoryCreate {
 		Name: category.Name,
 	}
 	return formatter
+}
+
+func formatCategory(category database.Category) FormatterWithoutTodos {
+	formatter := FormatterWithoutTodos{
+		ID: category.ID,
+		Name: category.Name,
+	}
+	return formatter
+}
+
+func FormatWithoutTodosCategories(categories []database.Category) []FormatterWithoutTodos {
+	var categoriesformatter []FormatterWithoutTodos
+
+	for _, category := range categories{
+		categoryformatter := formatCategory(category)
+		categoriesformatter = append(categoriesformatter,categoryformatter)
+	}
+	return categoriesformatter
 }
 
 func FormatCategories(categories []database.Category) []FormatterCategoryCreate {

@@ -6,6 +6,7 @@ import (
 	"todosAPI/src/category"
 	"todosAPI/src/category/create"
 	"todosAPI/src/category/read"
+	"todosAPI/src/token"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -20,15 +21,21 @@ func CategoryRouteInit(todoController category.Controller) *categoryRoute  {
 }
 
 func (r *categoryRoute) GetCategoryRoute(c *gin.Context) {
-	category,err_response := r.categoryCreate.GetCategoryController()
+	todoQuery := c.Query("todo")
+	category,err_response := r.categoryCreate.GetCategoryController(todoQuery)
 	
 	if err_response != nil {
 		c.JSON(http.StatusUnprocessableEntity,err_response)
 		return
 	}
 	
-	formatResponse := read.FormatCategories(category)
-	c.JSON(http.StatusOK,formatResponse)
+	if todoQuery == "1" {
+		formatResponse := read.FormatCategories(category)
+		c.JSON(http.StatusOK,formatResponse)
+	}else{
+		formatResponse := read.FormatWithoutTodosCategories(category)
+		c.JSON(http.StatusOK,formatResponse)
+	}
 }
 
 func (r *categoryRoute) FindCategoryRoute(c *gin.Context) {
@@ -56,8 +63,12 @@ func (r *categoryRoute) DeleteCategoryRoute(c *gin.Context) {
 }
 
 func (r *categoryRoute) CreateCategoryRoute(c *gin.Context) {
+	// var ctx *gin.Context
+	authPayload := c.MustGet("authorization_payload_key").(*token.Payload)
+	
 	var input create.CreateCategoryInput
 	err := c.ShouldBindJSON(&input)
+	input.UserID = authPayload.Username
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest,err)

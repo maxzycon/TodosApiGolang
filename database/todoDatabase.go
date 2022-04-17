@@ -7,6 +7,8 @@ type Todos struct {
 	Title string
 	Description string
 	CategoryID int
+	UserID string `gorm:"type:varchar;size:255"`
+	User User `gorm:"references:username"`
 	Category Category
 }
 

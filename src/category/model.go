@@ -8,7 +8,7 @@ import (
 )
 
 type Model interface {
-	Get() ([]database.Category,error)
+	Get(IsTodo string) ([]database.Category,error)
 	Find(ID string) (database.Category,error) 
 	Delete(ID string) (database.Category,error) 
 	Create(category database.Category)	(database.Category, error)
@@ -22,9 +22,13 @@ func InitConstructor() *constructor {
 	return &constructor{utils.DB}
 }
 
-func (c *constructor) Get() ([]database.Category,error) {
+func (c *constructor) Get(IsTodo string) ([]database.Category,error) {
 	var dataCategory []database.Category
-	c.db.Preload("Todos").Find(&dataCategory)
+	if IsTodo == "1" {
+		c.db.Preload("Todos").Find(&dataCategory)
+	}else{
+		c.db.Find(&dataCategory)
+	}
 	return dataCategory,nil
 }
 
